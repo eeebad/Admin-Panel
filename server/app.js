@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const corOptions = {
   origin: "*",
+  credentials: true,
   optionsSuccessStatus: 200,
 };
 //db connection
