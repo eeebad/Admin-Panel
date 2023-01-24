@@ -10,7 +10,7 @@ var userSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     profileImage: { type: String },
-    app_token: { type: String },
+    refreshToken: { type: String },
   },
   {
     timestamps: true,
