@@ -19,6 +19,10 @@ const corOptions = {
 //db connection
 db();
 //setting the cookie parser middleware
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
