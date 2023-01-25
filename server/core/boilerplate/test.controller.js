@@ -7,7 +7,7 @@ const {
   debugHttpRequestBody,
   debugHttpResponse,
 } = require("../../utils/debug");
-const User = require("../../models/test.model");
+const test = require("../../models/test.model");
 
 /**
  * Display a listing of the resource.
@@ -19,12 +19,12 @@ const User = require("../../models/test.model");
 exports.index = async (req, res, next) => {
   try {
     debugHttpRequestBody(`req.body`, req.body);
-    let users = await User.find({}, { password: 0 });
-    debugHttpResponse(`res`, users);
+    let tests = await test.find({}, { password: 0 });
+    debugHttpResponse(`res`, tests);
     return res.send({
       code: 200,
-      message: "Users have been retrieved successfully.",
-      user: users,
+      message: "tests have been retrieved successfully.",
+      user: tests,
     });
   } catch (error) {
     next(error);
@@ -43,7 +43,7 @@ exports.store = async (req, res, next) => {
     debugHttpRequestBody(`req.body`, req.body);
     let payload = req.body;
     let { email, password } = payload;
-    let payloadUser = await User.findOne({ email });
+    let payloadUser = await test.findOne({ email });
 
     if (payloadUser) {
       return res.status(400).send({
@@ -51,7 +51,7 @@ exports.store = async (req, res, next) => {
         message: "A User with this email already exists.",
       });
     }
-    const user = new User(payload);
+    const user = new test(payload);
     await user.save().then(() => {
       debugHttpResponse(`res`, user);
       return res.send({

@@ -1,8 +1,9 @@
 const express = require("express");
+var bodyParser = require("body-parser");
 const cors = require("cors");
 const logger = require("morgan");
 const path = require("path");
-const admin = require("./src/routes/admin/user.route");
+const admin = require("./src/routes/admin/index");
 const auth = require("./src/routes/admin/auth.route");
 const register = require("./src/routes/admin/register.route");
 const refresh = require("./src/routes/admin/refreshToken.route");
@@ -18,11 +19,9 @@ const corOptions = {
 };
 //db connection
 db();
+app.use(bodyParser.urlencoded({ extended: false }));
+
 //setting the cookie parser middleware
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +32,9 @@ app.use(logger("dev"));
 app.use("/v1/admin/auth", auth);
 app.use("/v1/admin/refresh", refresh);
 app.use("/v1/admin/register", register);
+
 app.use(verifyJWT);
+
 app.use("/v1/admin", admin);
 
 app.listen(PORT, () => {

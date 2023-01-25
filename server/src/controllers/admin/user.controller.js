@@ -77,7 +77,7 @@ exports.store = async (req, res, next) => {
  */
 exports.edit = async (req, res, next) => {
   try {
-    // debugHttpRequestBody(`req.body`, req.body);
+    debugHttpRequestBody(`req.body`, req.body);
     const { id } = req.params;
     const user = await User.findOne({ _id: ObjectId(id) }, { password: 0 });
 
@@ -145,13 +145,13 @@ exports.update = async (req, res, next) => {
 exports.destroy = async (req, res, next) => {
   try {
     const { id } = req.params;
-
     debugHttpRequestBody(`req.body`, req.body);
+    await User.deleteOne({ _id: ObjectId(id) });
 
     debugHttpResponse(`res`);
     return res.send({
       code: 200,
-      message: "Resource have been updated successfully.",
+      message: "User have been deleted successfully.",
     });
   } catch (error) {
     next(error);
