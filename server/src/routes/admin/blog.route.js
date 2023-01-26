@@ -4,13 +4,10 @@
 
 var express = require("express");
 var router = express.Router();
-var controller = require("../../controllers/admin/user.controller");
+var controller = require("../../controllers/admin/blog.controller");
 var uploads = require("../../config/multer");
 
-//to get all users
 router.route("/").get(controller.index).post(controller.store);
-
-//for specific user
 router
   .route("/:id")
   .get(controller.edit)

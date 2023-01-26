@@ -1,4 +1,11 @@
+const express = require("express");
 
-var userRoutes = require('./user.route')
+var blogRoutes = require("./blog.route");
+var userRoutes = require("./user.route");
+
+const router = express.Router();
 //boilerplate
-router.use('/user',userRoutes)
+router.use("/blog", blogRoutes);
+router.use("/user", userRoutes);
+
+module.exports = router;

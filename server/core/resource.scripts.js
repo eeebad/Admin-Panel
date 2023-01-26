@@ -3,17 +3,13 @@ const fs = require("fs");
 // Source file path
 const srcFileController = "./core/boilerplate/test.controller.js";
 const srcFileRoute = "./core/boilerplate/test.routes.js";
-const srcutilsApiError = "./core/boilerplate/APIError.js";
-const srcutilsdebug = "./core/boilerplate/debug.js";
-const IndexFile = "./src/routes/index.js";
+const IndexFile = "./src/routes/admin/index.js";
 const srcFileModel = "./core/boilerplate/test.model.js";
+// require("../src/routes/admin/index");
 
 // Destination directory
 const destDirController = "./src/controllers/admin/";
 const destDirRoute = "./src/routes/admin/";
-const destutilsApiError = "./src/utils/";
-const destutilsDebug = "./src/utils/";
-
 const destDirModel = "./src/models/";
 
 const name = process.argv[2];
@@ -39,31 +35,6 @@ fs.readFile(srcFileController, (err, data) => {
     }
   );
 });
-//utils folder for debug
-fs.readFile(srcutilsdebug, (err, data) => {
-  if (err) throw err;
-
-  // Write the test controller file to the destination directory with the new file name
-  if (!fs.existsSync(destutilsDebug))
-    fs.mkdirSync(destutilsDebug, { recursive: true });
-  fs.writeFile(destutilsDebug + "debug.js", data, (err) => {
-    if (err) throw err;
-    console.log(`debug.js created in utils`);
-  });
-});
-
-//utils folder for Error handling
-fs.readFile(srcutilsApiError, (err, data) => {
-  if (err) throw err;
-
-  // Write the test controller file to the destination directory with the new file name
-  if (!fs.existsSync(destutilsApiError))
-    fs.mkdirSync(destutilsApiError, { recursive: true });
-  fs.writeFile(destutilsApiError + "APIError.js", data, (err) => {
-    if (err) throw err;
-    console.log(`APIError.js created in untils`);
-  });
-});
 
 // Read the test route file
 
@@ -72,7 +43,7 @@ fs.readFile(srcFileRoute, (err, data) => {
   let str = data.toString();
   let modifiedData = str.replace(/test/g, `${name}`);
   let newdata = modifiedData.replace(/auth/g, `${name}`);
-  ``;
+
   // Write the test route file to the destination directory with the new file name
   if (!fs.existsSync(destDirRoute))
     fs.mkdirSync(destDirRoute, { recursive: true });
@@ -84,14 +55,14 @@ fs.readFile(srcFileRoute, (err, data) => {
     //routes added in index file
     if (!fs.existsSync(IndexFile)) {
       fs.mkdirSync("./src/routes/admin", { recursive: true });
-      var newRoute = `\nvar ${name}Routes = require('./${name}.route')\n//boilerplate\nrouter.use('/${name}',${name}Routes)`;
+      var newRoute = `\nconst express = require("express")\nconst router = express.Router()\nvar ${name}Routes =require('./${name}.route')\n
+      //boilerplate\nrouter.use('/${name}',${name}Routes)\nmodule.exports = router`;
+
       fs.writeFile("./src/routes/admin/" + "index.js", newRoute, (err) => {
         if (err) throw err;
         console.log("New index.js file added !");
       });
     } else {
-      console.log(`else if`);
-
       fs.readFile(IndexFile, (err, data1) => {
         if (err) throw err;
         let str = data1.toString();

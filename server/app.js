@@ -1,8 +1,9 @@
 const express = require("express");
+var bodyParser = require("body-parser");
 const cors = require("cors");
 const logger = require("morgan");
 const path = require("path");
-const admin = require("./src/routes/admin/user.route");
+const admin = require("./src/routes/admin/index");
 const auth = require("./src/routes/admin/auth.route");
 const register = require("./src/routes/admin/register.route");
 const refresh = require("./src/routes/admin/refreshToken.route");
@@ -35,7 +36,9 @@ app.use(logger("dev"));
 app.use("/v1/admin/auth", auth);
 app.use("/v1/admin/refresh", refresh);
 app.use("/v1/admin/register", register);
+
 app.use(verifyJWT);
+
 app.use("/v1/admin", admin);
 
 app.listen(PORT, () => {

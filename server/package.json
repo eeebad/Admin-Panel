@@ -9,13 +9,15 @@
     "make-resource": "node core/resource.scripts.js",
     "make-auth": "node core/auth.scripts.js",
     "make-upload": "node core/upload.scripts.js",
-    "make-config": "node core/config.scripts.js"
+    "make-config": "node core/config.scripts.js",
+    "make-error-handler": "node core/error.scripts.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
