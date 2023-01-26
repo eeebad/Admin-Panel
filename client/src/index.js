@@ -7,8 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    {/* <Provider store={store}> */}
+  // <React.StrictMode>
+    // <Provider store={store}> 
       <BrowserRouter>
         <DarkModeContextProvider>
           <AuthProvider>
@@ -16,6 +16,6 @@ root.render(
           </AuthProvider>
         </DarkModeContextProvider>
       </BrowserRouter>
-    {/* </Provider> */}
-  </React.StrictMode>
+    //  </Provider> 
+  //  </React.StrictMode> 
 );

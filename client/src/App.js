@@ -1,16 +1,15 @@
 import { Suspense, useContext, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { DarkModeContext } from "./context/darkModeContext";
-import { productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
 import PersistLogin from "./utils/PersistLogin";
 
 const Layout = lazy(() => import("./components/layout/Layout"));
 const Home = lazy(() => import("./pages/home/Home"));
 const Login = lazy(() => import("./pages/login/Login"));
-const List = lazy(() => import("./pages/list/List"));
+const User = lazy(() => import("./pages/user/User"));
 const Single = lazy(() => import("./pages/single/Single"));
-const New = lazy(() => import("./pages/new/New"));
+const CreateUser = lazy(() => import("./pages/user/CreateUser"));
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -23,17 +22,14 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route element={<PersistLogin />}>
               <Route index element={<Home />} />
+              <Route path="users">
+                <Route index element={<User />} />
+                <Route path=":userId" element={<Single />} />
+                <Route path="create" element={<CreateUser />} />
+              </Route>
             </Route>
 
-
-            {/* <Route path="users">
-              <Route index element={<List />} />
-              <Route path=":userId" element={<Single />} />
-              <Route
-                path="new"
-                element={<New inputs={userInputs} title="Add New User" />}
-              />
-            </Route>
+            {/* 
             <Route path="products">
               <Route index element={<List />} />
               <Route path=":productId" element={<Single />} />
