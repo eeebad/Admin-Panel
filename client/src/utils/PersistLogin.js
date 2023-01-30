@@ -4,7 +4,7 @@ import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
 
 const PersistLogin = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [verification, setVerification] = useState(true);
   const refresh = useRefreshToken();
   const { auth } = useAuth();
   const location = useLocation();
@@ -12,34 +12,47 @@ const PersistLogin = () => {
 
   useEffect(() => {
     // let isMounted = true;
-    console.log("inside persist");
 
     const verifyRefreshToken = async () => {
+    // console.log("inside refresh");
+
       try {
         await refresh();
       } catch (err) {
         console.error(err);
-        navigate("/login");
-      } finally {
-        // isMounted &&
-        setIsLoading(false);
-        console.log("inside finally");
-      }
+        console.log('here')
+        setVerification(false)
+        // return <Navigate to="/login" state={{ from: location }} replace />
+      } 
+    //   finally {
+    //     // isMounted &&
+    //     setIsLoading(false);
+    //     console.log("inside finally");
+    //   }
     };
+
+    const verifyTokenExp = async (token) => {
+    console.log("inside veri");
+
+        const checkExp = JSON.parse(window.atob(token.split(".")[1]))
+        checkExp.exp * 1000 < Date.now() && verifyRefreshToken() 
+
+    }
 
     // persist added here AFTER tutorial video
     // Avoids unwanted call to verifyRefreshToken
-    !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
+    auth?.accessToken ? verifyTokenExp(auth.accessToken) : verifyRefreshToken() 
+    // verifyRefreshToken()
+        // return () => isMounted = false;
+  }, [location]);
 
-    // return () => isMounted = false;
-  }, []);
 
-  // useEffect(() => {
-  //     console.log(`isLoading: ${isLoading}`)
-  //     console.log(`aT: ${JSON.stringify(auth?.accessToken)}`)
-  // }, [isLoading])
 
-  return <>{isLoading ?  <p>Loading...</p> : <Outlet />}</>;
+  return <>
+  { 
+  verification ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />
+  }
+  </>;
 };
 
 export default PersistLogin;

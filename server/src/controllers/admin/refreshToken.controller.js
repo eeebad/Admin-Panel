@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 
 const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
-  console.log("cookies", cookies);
   if (!cookies?.jwt) return res.sendStatus(401);
   const refreshToken = cookies.jwt;
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
@@ -47,7 +46,7 @@ const handleRefreshToken = async (req, res) => {
           id: decoded.id,
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15s" }
+        { expiresIn: "5m" }
       );
 
       const newRefreshToken = jwt.sign(
@@ -56,7 +55,7 @@ const handleRefreshToken = async (req, res) => {
           id: foundUser.id.toString(),
         },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "30s" }
+        { expiresIn: "10m" }
       );
       // Saving refreshToken with current user
       foundUser.refreshToken = newRefreshToken;

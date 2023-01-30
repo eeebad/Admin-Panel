@@ -8,13 +8,13 @@ var controller = require("../../controllers/admin/user.controller");
 var uploads = require("../../config/multer");
 
 //to get all users
-router.route("/").get(controller.index).post(controller.store);
+router.route("/").get(controller.index).post(uploads.single("profileImage"), controller.store);
 
 //for specific user
 router
   .route("/:id")
   .get(controller.edit)
-  .put(uploads.single("profile"), controller.update)
+  .put(uploads.single("profileImage"), controller.update)
   .delete(controller.destroy);
 
 module.exports = router;

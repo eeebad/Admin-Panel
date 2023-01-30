@@ -1,22 +1,32 @@
 import "./user.scss";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
-const CreateUser = () => {
+const UpdateUser = () => {
+
   const { auth } = useAuth();
   const navigate = useNavigate()
-  const initialData = {
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    profileImage: "",
-  };
+  const location = useLocation()
+  const userId = location.pathname.split('/').pop()
+  const [data, setData] = useState(null);
 
-  const [data, setData] = useState(initialData);
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await axios.get(`user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
+      setData(response.data.user);
+    };
+
+    getUser();
+  }, []);
+
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,11 +35,10 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     let formData = new FormData();
     for (const key in data) formData.append(key, data[key]);
 
-    const response = await axios.post(`user`, formData, {
+    const response = await axios.put(`user/${userId}`, formData, {
       headers:{
         'Authorization': `Bearer ${auth.accessToken}`,
       }
@@ -46,15 +55,15 @@ const CreateUser = () => {
     <div className="new">
       <div className="newContainer">
         <div className="top">
-          <h1>Add new user</h1>
+          <h1>Update user</h1>
         </div>
         <div className="bottom">
           <div className="left">
             <img
               src={
-                data.profileImage
-                  ? URL.createObjectURL(data.profileImage)
-                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                data?.profileImage
+                //   ? URL.createObjectURL(data.profileImage)
+                //   : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
               alt=""
             />
@@ -78,6 +87,7 @@ const CreateUser = () => {
                 <input
                   name="firstname"
                   onChange={handleChange}
+                  value={data?.firstname}
                   type="text"
                   placeholder="Firstname"
                 />
@@ -87,6 +97,7 @@ const CreateUser = () => {
                 <input
                   name="lastname"
                   onChange={handleChange}
+                  value={data?.lastname}
                   type="text"
                   placeholder="Lastname"
                 />
@@ -95,8 +106,9 @@ const CreateUser = () => {
                 <label>Email</label>
                 <input
                   name="email"
-                  onChange={handleChange}
                   type="text"
+                  value={data?.email}
+                  disabled
                   placeholder="Email"
                 />
               </div>
@@ -105,6 +117,7 @@ const CreateUser = () => {
                 <input
                   name="password"
                   onChange={handleChange}
+                  value={data?.password}
                   type="password"
                   placeholder="Password"
                 />
@@ -118,4 +131,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default UpdateUser;

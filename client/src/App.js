@@ -10,6 +10,7 @@ const Login = lazy(() => import("./pages/login/Login"));
 const User = lazy(() => import("./pages/user/User"));
 const Single = lazy(() => import("./pages/single/Single"));
 const CreateUser = lazy(() => import("./pages/user/CreateUser"));
+const UpdateUser = lazy(() => import("./pages/user/UpdateUser"));
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -26,6 +27,7 @@ function App() {
                 <Route index element={<User />} />
                 <Route path=":userId" element={<Single />} />
                 <Route path="create" element={<CreateUser />} />
+                <Route path="edit/:userId" element={<UpdateUser />} />
               </Route>
             </Route>
 

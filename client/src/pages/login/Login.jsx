@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import "./login.scss"
 
 const Login = () => {
   const navigate = useNavigate()
+  const location = useLocation();
   const {setAuth} = useAuth();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
 
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async () => {
 
@@ -28,7 +30,7 @@ const Login = () => {
  
       setAuth({accessToken})
 
-      navigate("/");
+      navigate(from, { replace: true });
 
     } catch (error) {
       console.log(error,"error")
