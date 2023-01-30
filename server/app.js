@@ -10,23 +10,27 @@ const refresh = require("./src/routes/admin/refreshToken.route");
 const verifyJWT = require("./src/middlewares/verifyJWT.middleware");
 const cookieParser = require("cookie-parser");
 const db = require("./src/config/db");
+const corsOptions = require('./src/config/corsOptions');
+const credentials = require('./src/middlewares/credentials');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
-const corOptions = {
-  origin: "*",
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
+
 //db connection
 db();
-app.use(bodyParser.urlencoded({ extended: false }));
 
-//setting the cookie parser middleware
+
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static(path.join(__dirname, "/src/uploads/images")));
-app.use(cors(corOptions));
 app.use(logger("dev"));
 
 app.use("/v1/admin/auth", auth);
